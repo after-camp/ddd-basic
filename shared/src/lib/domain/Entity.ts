@@ -1,20 +1,19 @@
+import {UniqueEntityID} from './UniqueEntityID';
 
-import { UniqueEntityID } from './UniqueEntityID';
-
-const isEntity = (v: any): v is Entity<any> => {
-  return v instanceof Entity;
+const isEntity = (v: any): v is EntityClass<any> => {
+  return v instanceof EntityClass;
 };
 
-export abstract class Entity<T> {
+export abstract class EntityClass<T> {
   protected readonly _id: UniqueEntityID;
   public readonly props: T;
 
-  constructor (props: T, id?: UniqueEntityID) {
+  constructor(props: T, id?: UniqueEntityID) {
     this._id = id ? id : new UniqueEntityID();
     this.props = props;
   }
 
-  public equals (object?: Entity<T>) : boolean {
+  public equals(object?: EntityClass<T>): boolean {
 
     if (object == null || object == undefined) {
       return false;
@@ -29,5 +28,13 @@ export abstract class Entity<T> {
     }
 
     return this._id.equals(object._id);
+  }
+}
+
+export function Entity<T extends { new(...args: any[]): any }>(Klass: T, context: ClassDecoratorContext) {
+  return class extends Klass {
+    constructor(...args: any[]) {
+      super(...args);
+    }
   }
 }

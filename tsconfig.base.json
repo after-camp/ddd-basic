@@ -5,7 +5,6 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
@@ -15,7 +14,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ddd/shared": ["shared/src/index.ts"]
+      "@ddd/shared/domain": ["shared/src/lib/domain"]
     }
   },
   "exclude": ["node_modules", "tmp"]
