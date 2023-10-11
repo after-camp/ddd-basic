@@ -1,8 +1,9 @@
 import {Entity, EntityClass, Identifier} from "@ddd/shared/domain";
+import {Email} from "./email";
 
-interface UserProps {
+export interface UserProps {
   id?: string;
-  email: string;
+  email: Email;
   phone: `${number}-${number}-${number}`;
   username: string;
   password: string;

@@ -6,8 +6,12 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 const app = express();
 
+
 const v1Router = express.Router();
 v1Router.use('/users', userRouter);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1', v1Router)
 

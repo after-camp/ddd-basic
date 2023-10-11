@@ -14,7 +14,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ddd/shared/domain": ["shared/src/lib/domain"]
+      "@ddd/shared/domain": ["shared/src/lib/domain/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
