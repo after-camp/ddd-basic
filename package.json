@@ -11,6 +11,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.1.0",
     "@nx/esbuild": "16.10.0",
     "@nx/eslint-plugin": "16.10.0",
     "@nx/jest": "16.10.0",

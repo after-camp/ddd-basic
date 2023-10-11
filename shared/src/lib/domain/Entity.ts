@@ -31,7 +31,7 @@ export abstract class EntityClass<T> {
   }
 }
 
-export function Entity<T extends { new(...args: any[]): any }>(Klass: T, context: ClassDecoratorContext) {
+export function Entity<T extends { new(...args: any[]): any }>(Klass: T) {
   return class extends Klass {
     constructor(...args: any[]) {
       super(...args);

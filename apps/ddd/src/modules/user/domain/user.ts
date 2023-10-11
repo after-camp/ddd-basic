@@ -1,15 +1,16 @@
-import {Entity, EntityClass} from "@ddd/shared/domain";
+import {Entity, EntityClass, Identifier} from "@ddd/shared/domain";
 
 interface UserProps {
+  id?: string;
   email: string;
+  phone: `${number}-${number}-${number}`;
   username: string;
   password: string;
 }
 
 @Entity
-class User extends EntityClass<UserProps> {
-
+export class User extends EntityClass<UserProps> {
   constructor(props: UserProps) {
-    super(props)
+    super(props, new Identifier(props.id))
   }
 }
