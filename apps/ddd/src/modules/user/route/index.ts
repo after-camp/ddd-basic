@@ -2,21 +2,35 @@ import express from "express";
 import { User, UserProps } from "../domain/user";
 import { Email } from "../domain/email";
 import { Either } from "effect";
-import { runSync } from "effect/Effect";
+import { Username } from "../domain/username";
+import { Phone } from "../domain/phone";
 
 const userRouter = express.Router();
 
 type CreateUserArgs = {
-  [K in keyof UserProps]: K extends "email" ? string : UserProps[K];
+  [K in keyof UserProps]: string;
 };
 userRouter.post<any, any, any, CreateUserArgs>("/", (req, res) => {
   const userProps = req.body;
 
   const emailOrError = Email.create(userProps.email);
-  Either.match(emailOrError, {
+  const phoneOrError = Phone.create(userProps.phone);
+  const usernameOrError = Username.create(userProps.username);
+
+  const propsOrError = Either.all([
+    emailOrError,
+    phoneOrError,
+    usernameOrError,
+  ]);
+  Either.match(propsOrError, {
     onLeft: (e) => res.status(400).send(e),
-    onRight: (email) => {
-      const user = new User({ ...userProps, email });
+    onRight: ([email, phone, username]) => {
+      const user = new User({
+        email,
+        phone,
+        username,
+        password: userProps.password,
+      });
       res.send(user);
     },
   });
