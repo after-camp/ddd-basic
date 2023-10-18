@@ -6,7 +6,8 @@ import {
   UsernameAlreadyExistsError,
 } from "../useCase/createUser";
 import { Either } from "effect";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
+import { UserRepoImpl } from "../infra/UserRepoImpl";
 
 const userRouter = express.Router();
 
@@ -19,7 +20,7 @@ userRouter.post<any, any, any, CreateUserArgs>("/", async (req, res) => {
   const email = DOMPurify.sanitize(req.body.email);
   const username = DOMPurify.sanitize(req.body.username);
 
-  const userOrError = await new CreateUser().execute({
+  const userOrError = await new CreateUser(new UserRepoImpl()).execute({
     phone,
     email,
     username,

@@ -5,7 +5,7 @@ import { Username } from "./username";
 import { Password } from "./password";
 
 export interface UserProps {
-  id?: string;
+  id?: number;
   email: Email;
   phone: Phone;
   username: Username;
