@@ -33,7 +33,7 @@ export class Login implements UseCase<any, any> {
 
     const [username, password] = errorOrNot.right;
 
-    const user = await this.userRepo.getUserByUsername(username.props.value);
+    const user = await this.userRepo.getUserByUsername(username);
     if (user === undefined) {
       return Either.left(LoginError.UsernameNotFoundError);
     }

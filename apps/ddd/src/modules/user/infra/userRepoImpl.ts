@@ -12,12 +12,15 @@ export class UserRepoImpl implements UserRepo {
     schema: { users: usersTable },
   });
 
-  async getUserByUsername(username: Username): Promise<User> {
+  async getUserByUsername(username: Username): Promise<User | undefined> {
     const user = await this.db.query.users.findFirst({
       where: (users, { eq }) => eq(users.username, username.props.value),
     });
-
-    return UserMapper.toDomain(user);
+    if (user) {
+      return UserMapper.toDomain(user);
+    } else {
+      return undefined;
+    }
   }
 
   async create(user: User): Promise<User> {
