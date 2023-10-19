@@ -7,8 +7,8 @@ import { Either } from "effect";
 import { User } from "../domain/user";
 import { CreateUserArgs } from "../route";
 import { ValueOf } from "type-fest";
-import { UserRepo } from "../infra/UserRepo";
-import { CreateUserDto } from "../dto/CreateUserDto";
+import { UserRepo } from "../infra/userRepo";
+import { CreateUserDto } from "../dto/createUserDto";
 
 export const EmailAlreadyExistsError = "Email already exists" as const;
 export const UsernameAlreadyExistsError = "Username already exists" as const;

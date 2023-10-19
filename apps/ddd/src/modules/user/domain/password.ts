@@ -4,6 +4,7 @@ import * as bcrypt from "bcrypt";
 
 interface PasswordProps {
   value: string;
+  hashed?: boolean;
 }
 
 export const CreatePasswordError = {
@@ -45,12 +46,20 @@ export class Password extends ValueObject<PasswordProps> {
     }
 
     return Either.right(
-      new Password({ value: await this.hashPassword(password) }),
+      new Password({ value: await this.hashPassword(password), hashed: true }),
     );
+  }
+
+  public static unsafeCreate(password: string): Password {
+    return new Password({ value: password, hashed: false });
   }
 
   private static hashPassword(password: string): Promise<string> {
     const saltRound = 10;
     return bcrypt.hash(password, saltRound);
+  }
+
+  async comparePassword(value): Promise<boolean> {
+    return bcrypt.compare(value, this.props.value);
   }
 }

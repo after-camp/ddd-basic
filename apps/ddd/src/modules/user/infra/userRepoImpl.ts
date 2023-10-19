@@ -1,15 +1,24 @@
-import { UserRepo } from "./UserRepo";
+import { UserRepo } from "./userRepo";
 import { users as usersTable } from "../../../infra/db/users";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { User } from "../domain/user";
 import { Email } from "../domain/email";
 import { Username } from "../domain/username";
 import { dbPool } from "../../../infra/pool";
+import { UserMapper } from "./UserMapper";
 
 export class UserRepoImpl implements UserRepo {
   private db = drizzle(dbPool, {
     schema: { users: usersTable },
   });
+
+  async getUserByUsername(username: Username): Promise<User> {
+    const user = await this.db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.username, username.props.value),
+    });
+
+    return UserMapper.toDomain(user);
+  }
 
   async create(user: User): Promise<User> {
     const newUser = await this.db
