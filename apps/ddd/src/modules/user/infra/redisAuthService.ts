@@ -28,10 +28,15 @@ export class RedisAuthService implements AuthService {
     return Promise.all(keyValues.map((kv) => this.client.get(kv)));
   }
 
-  decodeJWT(token: string) {
-    return jwt.verify(token, SECRET, (err, decoded) => {
-      if (err) return undefined;
-      return decoded;
+  decodeJWT(token: string): Promise<JWTClaims> {
+    return new Promise((resolve) => {
+      jwt.verify(token, SECRET, (err, decoded) => {
+        if (err) {
+          console.error(err);
+          return resolve(undefined);
+        }
+        return resolve(decoded);
+      });
     });
   }
   constructor() {
@@ -64,12 +69,16 @@ export class RedisAuthService implements AuthService {
     });
   }
 
-  private addToken(
+  private async addToken(
     username: string,
     refreshToken: string,
     token: string,
   ): Promise<void> {
-    return this.set(this.constructKey(username, refreshToken), token);
+    await this.client.setEx(
+      this.constructKey(username, refreshToken),
+      7200,
+      token,
+    );
   }
 
   private async set(key: string, value: string): Promise<void> {

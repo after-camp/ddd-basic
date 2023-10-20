@@ -88,4 +88,29 @@ userRouter.post<any, any, any, LoginArgs>(
   },
 );
 
+userRouter.post('/test', async (req, res) => {
+  const authorization = req.headers['authorization']
+  if (!authorization) {
+    return res.status(403).send({ message: 'No token provided.' });
+  }
+  const accessToken = authorization.split(' ')[1];
+  if (!accessToken) {
+    return res.status(403).send({ message: 'No token provided.' });
+  }
+
+  const decoded = await authService.decodeJWT(accessToken);
+  if (decoded === undefined) {
+    return res.status(403).send({ message: 'Failed to authenticate token.' });
+  }
+
+  const {username} = decoded;
+  const tokens = await authService.getTokens(username);
+
+  if (tokens.length === 0) {
+    return res.status(403).send({ message: 'Failed to authenticate token.' });
+  } else {
+    return res.status(200).send({ message: 'Success' });
+  }
+})
+
 export { userRouter };
