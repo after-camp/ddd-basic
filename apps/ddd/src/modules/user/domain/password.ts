@@ -27,6 +27,7 @@ export class Password extends ValueObject<PasswordProps> {
 
   public static async create(
     password?: string,
+    hashed?: boolean,
   ): Promise<
     Either.Either<
       (typeof CreatePasswordError)[keyof typeof CreatePasswordError],
@@ -45,8 +46,20 @@ export class Password extends ValueObject<PasswordProps> {
       return Either.left(CreatePasswordError.TooLongPassword);
     }
 
+    if (hashed) {
+      return Either.right(
+        new Password({
+          value: await this.hashPassword(password),
+          hashed: true,
+        }),
+      );
+    }
+
     return Either.right(
-      new Password({ value: await this.hashPassword(password), hashed: true }),
+      new Password({
+        value: password,
+        hashed: false,
+      }),
     );
   }
 
@@ -59,7 +72,7 @@ export class Password extends ValueObject<PasswordProps> {
     return bcrypt.hash(password, saltRound);
   }
 
-  async comparePassword(value): Promise<boolean> {
+  async comparePassword(value: string): Promise<boolean> {
     return bcrypt.compare(value, this.props.value);
   }
 }

@@ -9,7 +9,7 @@ import { Either } from "effect";
 import DOMPurify from "isomorphic-dompurify";
 import { UserRepoImpl } from "../infra/userRepoImpl";
 import { Login, LoginError } from "../useCase/login";
-import { RedisAuthService } from "../infra/redisAuthService";
+import { authService } from "../../../main";
 
 const userRouter = express.Router();
 
@@ -53,36 +53,39 @@ userRouter.post<any, any, any, CreateUserArgs>("/", async (req, res) => {
   });
 });
 
-userRouter.post<any, any, any, LoginArgs>("/login", async (req, res) => {
-  const { username, password } = req.body;
+userRouter.post<any, any, any, LoginArgs>(
+  "/login",
+  async (req, res) => {
+    const { username, password } = req.body;
 
-  const result = await new Login(
-    new UserRepoImpl(),
-    new RedisAuthService(),
-  ).execute({
-    username,
-    password,
-  });
+    const result = await new Login(
+      new UserRepoImpl(),
+      authService,
+    ).execute({
+      username,
+      password,
+    });
 
-  Either.match(result, {
-    onLeft: (error) => {
-      switch (error) {
-        case LoginError.PasswordDoesNotMatchError:
-          res.status(401);
-          break;
-        case LoginError.UsernameNotFoundError:
-          res.status(404);
-          break;
-        default:
-          res.status(400);
-      }
+    Either.match(result, {
+      onLeft: (error) => {
+        switch (error) {
+          case LoginError.PasswordDoesNotMatchError:
+            res.status(401);
+            break;
+          case LoginError.UsernameNotFoundError:
+            res.status(404);
+            break;
+          default:
+            res.status(400);
+        }
 
-      res.send(error);
-    },
-    onRight: (loginDTOResponse) => {
-      res.send(loginDTOResponse);
-    },
-  });
-});
+        res.send(error);
+      },
+      onRight: (loginDTOResponse) => {
+        res.send(loginDTOResponse);
+      },
+    });
+  },
+);
 
 export { userRouter };

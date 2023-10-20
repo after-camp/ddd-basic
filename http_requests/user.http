@@ -7,3 +7,14 @@ Content-Type: application/json
   "password": "123456",
   "phone": "010-1234-5678"
 }
+
+###
+
+POST http://localhost:3000/api/v1/users/login
+Content-Type: application/json
+Authorization: Bearer abcd
+
+{
+"username": "JunsukP",
+"password": "123456"
+}
