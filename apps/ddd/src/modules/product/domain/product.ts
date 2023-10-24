@@ -8,6 +8,8 @@ interface ProductProps {
   name: ProductName;
   price: ProductPrice;
   stock: ProductStock;
+  categoryId: number;
+  brandId: number;
   createdAt?: Date;
 }
 @Entity

@@ -13,6 +13,8 @@ export class ProductRepositoryImpl implements ProductRepository {
     const newProducts = await this.db
       .insert(productTable)
       .values({
+        categoryId: product.props.categoryId,
+        brandId: product.props.brandId,
         name: product.props.name.props.value,
         price: product.props.price.props.value,
         stock: product.props.stock.props.value,
@@ -25,6 +27,8 @@ export class ProductRepositoryImpl implements ProductRepository {
       name: product.props.name,
       price: product.props.price,
       stock: product.props.stock,
+      brandId: product.props.brandId,
+      categoryId: product.props.categoryId,
       createdAt: new Date(newProduct.createdAt),
     });
   }

@@ -3,6 +3,8 @@ Content-Type: application/json
 
 {
   "name": "Product 1",
+  "categoryId": 1,
+  "brandId": 1,
   "price": 100,
   "stock": 1
 }

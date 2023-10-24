@@ -4,6 +4,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { dbPool } from "../../../infra/pool";
 import { brandTable } from "../../../infra/db/brands";
 import { BrandName } from "../domain/name";
+import { undefined } from "effect/Match";
 
 export class BrandRepositoryImpl implements BrandRepository {
   private db = drizzle(dbPool, {
@@ -34,6 +35,14 @@ export class BrandRepositoryImpl implements BrandRepository {
       where: (brands, { eq }) => eq(brands.name, brandName.props.value),
     });
 
-    return b !== undefined;
+    return !!b
+  }
+
+  async existsById(brandId: number) {
+    const b = await this.db.query.brands.findFirst({
+      where: (brands, { eq }) => eq(brands.id, brandId),
+    });
+
+    return !!b
   }
 }

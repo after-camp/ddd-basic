@@ -4,6 +4,7 @@ import { dbPool } from "../../../infra/pool";
 import { categoryTable } from "../../../infra/db/categories";
 import { Category } from "../domain/category";
 import { CategoryName } from "../domain/name";
+import { undefined } from "effect/Match";
 
 export class CategoryRepoImpl implements CategoryRepository {
   private db = drizzle(dbPool, {
@@ -33,6 +34,14 @@ export class CategoryRepoImpl implements CategoryRepository {
         eq(categories.name, categoryName.props.value),
     });
 
-    return c !== undefined;
+    return !!c;
+  }
+
+  async existsById(categoryId: number) {
+    const c = await this.db.query.categories.findFirst({
+      where: (categories, { eq }) => eq(categories.id, categoryId),
+    });
+
+    return !!c;
   }
 }
