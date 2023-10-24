@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { dbPool } from "../../../infra/pool";
 import { categoryTable } from "../../../infra/db/categories";
 import { Category } from "../domain/category";
+import { CategoryName } from "../domain/name";
 
 export class CategoryRepoImpl implements CategoryRepository {
   private db = drizzle(dbPool, {
@@ -24,5 +25,14 @@ export class CategoryRepoImpl implements CategoryRepository {
       name: category.props.name,
       display: category.props.display,
     });
+  }
+
+  async existsByName(categoryName: CategoryName): Promise<boolean> {
+    const c = await this.db.query.categories.findFirst({
+      where: (categories, { eq }) =>
+        eq(categories.name, categoryName.props.value),
+    });
+
+    return c !== undefined;
   }
 }

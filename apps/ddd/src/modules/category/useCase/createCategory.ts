@@ -7,14 +7,19 @@ import { CategoryRepository } from "../infra/categoryRepository";
 import { NewCategoryDto } from "../dto/newCategoryDto";
 import { Category } from "../domain/category";
 
-type CreateProductError =
+export const CreateCategoryError = {
+  CategoryNameAlreadyExists: "Category name already exists.",
+};
+
+type CreateCategoryError =
   | ValueOf<typeof CategoryNameError>
+  | typeof CreateCategoryError.CategoryNameAlreadyExists;
 
 export class CreateCategory implements UseCase<any, any> {
   constructor(private categoryRepository: CategoryRepository) {}
   public async execute(
     request: CreateCategoryArgs,
-  ): Promise<Either.Either<CreateProductError, NewCategoryDto>> {
+  ): Promise<Either.Either<CreateCategoryError, NewCategoryDto>> {
     const categoryNameOrError = CategoryName.create(request.name);
 
     if (Either.isLeft(categoryNameOrError)) {
@@ -22,6 +27,12 @@ export class CreateCategory implements UseCase<any, any> {
     }
 
     const categoryName = categoryNameOrError.right;
+
+    const exists = await this.categoryRepository.existsByName(categoryName);
+    if (exists) {
+      return Either.left(CreateCategoryError.CategoryNameAlreadyExists);
+    }
+
     const category = new Category({
       name: categoryName,
     });

@@ -12,10 +12,13 @@ import { Brand } from "../domain/brand";
 import { NewBrandDto } from "../dto/newBrandDto";
 import { CreateBrandArgs } from "../route";
 
+export const BrandNameAlreadyExists = "Brand name already exists.";
+
 type CreateProductError =
   | ValueOf<typeof BrandNameError>
   | ValueOf<typeof BrandCommissionError>
-  | ValueOf<typeof BrandRegistrationNumberError>;
+  | ValueOf<typeof BrandRegistrationNumberError>
+  | typeof BrandNameAlreadyExists;
 
 export class CreateBrand implements UseCase<any, any> {
   constructor(private brandRepository: BrandRepository) {}
@@ -39,6 +42,12 @@ export class CreateBrand implements UseCase<any, any> {
 
     const [brandName, brandCommission, brandRegistrationNumber] =
       propsOrError.right;
+
+    const exists = await this.brandRepository.existsByBrandName(brandName);
+    if (exists) {
+      return Either.left(BrandNameAlreadyExists);
+    }
+
     const brand = new Brand({
       name: brandName,
       commission: brandCommission,

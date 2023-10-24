@@ -1,0 +1,8 @@
+POST http://localhost:3000/api/v1/brands
+Content-Type: application/json
+
+{
+  "name": "ClothingClub",
+  "commission": 8,
+  "registrationNumber": "1111-1234-1234"
+}

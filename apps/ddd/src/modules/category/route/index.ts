@@ -1,6 +1,6 @@
 import express from "express";
 import { Either } from "effect";
-import { CreateCategory } from "../useCase/createCategory";
+import { CreateCategory, CreateCategoryError } from "../useCase/createCategory";
 import { CategoryRepoImpl } from "../infra/categoryRepoImpl";
 
 const categoryRouter = express.Router();
@@ -17,7 +17,13 @@ categoryRouter.post<any, any, any, CreateCategoryArgs>(
 
     Either.match(productOrError, {
       onLeft: (error) => {
-        res.status(400);
+        switch (error) {
+          case CreateCategoryError.CategoryNameAlreadyExists:
+            res.status(409);
+            break;
+          default:
+            res.status(400);
+        }
         res.send(error);
       },
       onRight: (dto) => {

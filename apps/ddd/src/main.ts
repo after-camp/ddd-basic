@@ -3,6 +3,8 @@ import { RedisAuthService } from "./modules/user/infra/redisAuthService";
 import express from "express";
 import { AuthService } from "./modules/user/infra/authService";
 import { productRouter } from "./modules/product/route";
+import { brandRouter } from "./modules/brand/route";
+import { categoryRouter } from "./modules/category/route";
 
 export const authService: AuthService = new RedisAuthService();
 
@@ -14,6 +16,8 @@ const app = express();
 const v1Router = express.Router();
 v1Router.use("/users", userRouter);
 v1Router.use("/products", productRouter);
+v1Router.use("/brands", brandRouter);
+v1Router.use("/categories", categoryRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

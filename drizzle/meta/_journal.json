@@ -22,6 +22,20 @@
       "when": 1698108691431,
       "tag": "0002_flat_korg",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1698112311699,
+      "tag": "0003_secret_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1698113568174,
+      "tag": "0004_icy_scrambler",
+      "breakpoints": true
     }
   ]
 }

@@ -9,7 +9,7 @@ export const BrandCommissionError = {
   Null: "Brand commission is null.",
   Negative: "Brand commission is negative.",
   TooHigh: "Brand commission is too high.",
-}
+};
 
 export class BrandCommission extends ValueObject<BrandCommissionProps> {
   private constructor(props: BrandCommissionProps) {
@@ -21,6 +21,6 @@ export class BrandCommission extends ValueObject<BrandCommissionProps> {
     if (value < 0) return Either.left(BrandCommissionError.Negative);
     if (value > 100) return Either.left(BrandCommissionError.TooHigh);
 
-    return Either.right(new BrandCommission({ value }));
+    return Either.right(new BrandCommission({ value: value / 100 }));
   }
 }

@@ -1,6 +1,6 @@
 import express from "express";
 import { Either } from "effect";
-import { CreateBrand } from "../useCase/createBrand";
+import { BrandNameAlreadyExists, CreateBrand } from "../useCase/createBrand";
 import { BrandRepositoryImpl } from "../infra/brandRepositoryImpl";
 
 const brandRouter = express.Router();
@@ -18,7 +18,13 @@ brandRouter.post<any, any, any, CreateBrandArgs>("/", async (req, res) => {
 
   Either.match(brandOrError, {
     onLeft: (error) => {
-      res.status(400);
+      switch (error) {
+        case BrandNameAlreadyExists:
+          res.status(409);
+          break;
+        default:
+          res.status(400);
+      }
       res.send(error);
     },
     onRight: (dto) => {

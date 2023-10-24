@@ -1,4 +1,4 @@
-import { EntityClass } from "@ddd/shared/domain";
+import { Entity, EntityClass } from "@ddd/shared/domain";
 import { CategoryName } from "./name";
 
 interface CategoryProps {
@@ -7,6 +7,7 @@ interface CategoryProps {
   display?: boolean;
 }
 
+@Entity
 export class Category extends EntityClass<CategoryProps> {
   constructor(props: CategoryProps) {
     super({ id: props.id, name: props.name, display: props.display ?? false });
