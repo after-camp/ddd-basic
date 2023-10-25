@@ -3,6 +3,9 @@ import { ProductRepository } from "./productRepo";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { dbPool } from "../../../infra/pool";
 import { productTable } from "../../../infra/db/products";
+import { ProductName } from "../domain/name";
+import { ProductStock } from "../domain/stock";
+import { ProductPrice } from "../domain/price";
 
 export class ProductRepositoryImpl implements ProductRepository {
   private db = drizzle(dbPool, {
@@ -31,5 +34,25 @@ export class ProductRepositoryImpl implements ProductRepository {
       categoryId: product.props.categoryId,
       createdAt: new Date(newProduct.createdAt),
     });
+  }
+
+  async getProducts(page: number, limit: number): Promise<Product[]> {
+    const ps = await this.db.query.products.findMany({
+      offset: (page - 1) * limit,
+      limit,
+    });
+
+    return ps.map(
+      (p) =>
+        new Product({
+          id: p.id,
+          name: ProductName.unsafeCreate(p.name),
+          price: ProductPrice.unsafeCreate(p.price),
+          stock: ProductStock.unsafeCreate(p.stock),
+          brandId: p.brandId,
+          categoryId: p.categoryId,
+          createdAt: new Date(p.createdAt),
+        }),
+    );
   }
 }

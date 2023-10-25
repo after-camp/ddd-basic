@@ -2,9 +2,14 @@ POST http://localhost:3000/api/v1/products
 Content-Type: application/json
 
 {
-  "name": "Product 1",
+  "name": "Product 2",
   "categoryId": 1,
   "brandId": 1,
-  "price": 100,
+  "price": 1000,
   "stock": 1
 }
+
+###
+
+GET http://localhost:3000/api/v1/products?page=1&limit=10
+Content-Type: application/json

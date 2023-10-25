@@ -23,4 +23,8 @@ export class BrandCommission extends ValueObject<BrandCommissionProps> {
 
     return Either.right(new BrandCommission({ value: value / 100 }));
   }
+
+  static unsafeCreate(commission: number) {
+    return new BrandCommission({ value: commission });
+  }
 }

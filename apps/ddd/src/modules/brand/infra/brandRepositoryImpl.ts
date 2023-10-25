@@ -5,6 +5,9 @@ import { dbPool } from "../../../infra/pool";
 import { brandTable } from "../../../infra/db/brands";
 import { BrandName } from "../domain/name";
 import { undefined } from "effect/Match";
+import { inArray } from "drizzle-orm";
+import { BrandCommission } from "../domain/commision";
+import { BrandRegistrationNumber } from "../domain/registrationNumber";
 
 export class BrandRepositoryImpl implements BrandRepository {
   private db = drizzle(dbPool, {
@@ -35,7 +38,7 @@ export class BrandRepositoryImpl implements BrandRepository {
       where: (brands, { eq }) => eq(brands.name, brandName.props.value),
     });
 
-    return !!b
+    return !!b;
   }
 
   async existsById(brandId: number) {
@@ -43,6 +46,25 @@ export class BrandRepositoryImpl implements BrandRepository {
       where: (brands, { eq }) => eq(brands.id, brandId),
     });
 
-    return !!b
+    return !!b;
+  }
+
+  async getBrandsByIds(brandIds: number[]): Promise<Brand[]> {
+    const bs = await this.db
+      .select()
+      .from(brandTable)
+      .where(inArray(brandTable.id, brandIds));
+
+    return bs.map(
+      (b) =>
+        new Brand({
+          id: b.id,
+          name: BrandName.unsafeCreate(b.name),
+          commission: BrandCommission.unsafeCreate(b.commision),
+          registrationNumber: BrandRegistrationNumber.unsafeCreate(
+            b.registrationNumber,
+          ),
+        }),
+    );
   }
 }

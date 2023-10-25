@@ -22,4 +22,8 @@ export class ProductPrice extends ValueObject<ProductPriceProps> {
 
     return Either.right(new ProductPrice({ value: price }));
   }
+
+  static unsafeCreate(price) {
+    return new ProductPrice({ value: price });
+  }
 }

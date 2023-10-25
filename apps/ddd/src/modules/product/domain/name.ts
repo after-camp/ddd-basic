@@ -30,4 +30,8 @@ export class ProductName extends ValueObject<ProductNameProps> {
 
     return Either.right(new ProductName({ value: name }));
   }
+
+  static unsafeCreate(name) {
+    return new ProductName({ value: name });
+  }
 }

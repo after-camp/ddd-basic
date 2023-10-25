@@ -23,4 +23,8 @@ export class BrandName extends ValueObject<BrandNameProps> {
 
     return Either.right(new BrandName({ value: name }));
   }
+
+  static unsafeCreate(name: string) {
+    return new BrandName({ value: name });
+  }
 }

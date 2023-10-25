@@ -23,4 +23,8 @@ export class BrandRegistrationNumber extends ValueObject<BrandRegistrationNumber
       new BrandRegistrationNumber({ value: registrationNumber }),
     );
   }
+
+  static unsafeCreate(registrationNumber: string) {
+    return new BrandRegistrationNumber({ value: registrationNumber });
+  }
 }

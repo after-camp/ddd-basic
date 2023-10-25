@@ -21,4 +21,8 @@ export class ProductStock extends ValueObject<ProductStockProps> {
     }
     return Either.right(new ProductStock({ value: stock }));
   }
+
+  static unsafeCreate(stock) {
+    return new ProductStock({ value: stock });
+  }
 }

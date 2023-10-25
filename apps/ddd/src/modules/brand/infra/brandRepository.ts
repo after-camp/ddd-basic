@@ -5,4 +5,5 @@ export interface BrandRepository {
   save(brand: Brand): Promise<Brand>;
   existsByBrandName(brandName: BrandName): Promise<boolean>;
   existsById(brandId: number): Promise<boolean>;
+  getBrandsByIds(brandIds: number[]): Promise<Brand[]>;
 }
