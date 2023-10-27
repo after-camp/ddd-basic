@@ -50,6 +50,13 @@
       "when": 1698116239592,
       "tag": "0006_cultured_zaladane",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1698370442224,
+      "tag": "0007_sticky_garia",
+      "breakpoints": true
     }
   ]
 }

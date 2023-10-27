@@ -5,6 +5,7 @@ import { ProductRepositoryImpl } from "../infra/productRepoImpl";
 import { BrandRepositoryImpl } from "../../brand/infra/brandRepositoryImpl";
 import { CategoryRepoImpl } from "../../category/infra/categoryRepoImpl";
 import { GetProducts } from "../useCase/getProducts";
+import { ProductNotFound, WriteReview } from "../useCase/writeReview";
 
 const productRouter = express.Router();
 
@@ -19,6 +20,13 @@ export type CreateProductArgs = {
 export type GetProductsArgs = {
   page: number;
   limit: number;
+};
+
+export type CreateReviewArgs = {
+  productId: number;
+  userId: number;
+  rating: number;
+  comment: string;
 };
 
 productRouter.post<any, any, any, CreateProductArgs>("/", async (req, res) => {
@@ -47,5 +55,31 @@ productRouter.get<any, GetProductsArgs, any, any>("/", async (req, res) => {
 
   res.send(productDtos);
 });
+
+productRouter.post<any, any, any, CreateReviewArgs>(
+  "/review",
+  async (req, res) => {
+    const newReviewOrError = await new WriteReview(
+      new ProductRepositoryImpl(),
+    ).execute(req.body);
+
+    Either.match(newReviewOrError, {
+      onLeft: (error) => {
+        switch (error) {
+          case ProductNotFound:
+            res.status(404);
+            break;
+          default:
+            res.status(400);
+        }
+
+        res.send();
+      },
+      onRight: () => {
+        res.status(201).send();
+      },
+    });
+  },
+);
 
 export { productRouter };

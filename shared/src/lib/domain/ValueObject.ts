@@ -1,4 +1,3 @@
-
 interface ValueObjectProps {
   [index: string]: any;
 }
@@ -8,18 +7,22 @@ interface ValueObjectProps {
  * equality through their structrual property.
  */
 
-export abstract class ValueObject<T extends ValueObjectProps> {
+export class ValueObject<T extends ValueObjectProps> {
   public props: T;
 
-  constructor (props: T) {
+  constructor(props: T) {
     let baseProps: any = {
-      ...props, 
-    }
+      ...props,
+    };
 
     this.props = baseProps;
   }
 
-  public equals (vo?: ValueObject<T>) : boolean {
+  static unsafeCreate(value: any) {
+    return new ValueObject({ value });
+  }
+
+  public equals(vo?: ValueObject<T>): boolean {
     if (vo === null || vo === undefined) {
       return false;
     }
