@@ -5,6 +5,9 @@ import { AuthService } from "./modules/user/infra/authService";
 import { productRouter } from "./modules/product/route";
 import { brandRouter } from "./modules/brand/route";
 import { categoryRouter } from "./modules/category/route";
+import { DomainEvents } from "../../../shared/src/lib/domain/events/DomainEvents";
+import { BrandDeleted } from "./modules/brand/domain/event/brandDeleted";
+import { ProductEventHandler } from "./modules/product/infra/eventListener";
 
 export const authService: AuthService = new RedisAuthService();
 
@@ -33,3 +36,5 @@ app.listen(port, host, () => {
 });
 
 app.on("close", authService.disconnect);
+
+DomainEvents.register((event) => ProductEventHandler.handle(event), BrandDeleted.name);

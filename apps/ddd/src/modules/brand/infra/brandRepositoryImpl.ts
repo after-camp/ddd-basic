@@ -4,15 +4,36 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { dbPool } from "../../../infra/pool";
 import { brandTable } from "../../../infra/db/brands";
 import { BrandName } from "../domain/name";
-import { undefined } from "effect/Match";
-import { inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { BrandCommission } from "../domain/commision";
 import { BrandRegistrationNumber } from "../domain/registrationNumber";
+import { DomainEvents } from "../../../../../../shared/src/lib/domain/events/DomainEvents";
+import { UniqueEntityID } from "@ddd/shared/domain";
 
 export class BrandRepositoryImpl implements BrandRepository {
   private db = drizzle(dbPool, {
     schema: { brands: brandTable },
   });
+
+  async delete(brand: Brand): Promise<void> {
+    await this.db.delete(brandTable).where(eq(brandTable.id, brand.props.id!));
+    DomainEvents.dispatchEventsForAggregate(
+      new UniqueEntityID(brand.props.id!),
+    );
+    return;
+  }
+
+  async findById(id: number): Promise<Brand | undefined> {
+    const b = await this.db.query.brands.findFirst({
+      where: (brands, { eq }) => eq(brands.id, id),
+    });
+
+    if (!b) {
+      return b as undefined;
+    }
+
+    return this.toDomain(b);
+  }
 
   async save(brand: Brand): Promise<Brand> {
     const newBrands = await this.db
@@ -66,5 +87,16 @@ export class BrandRepositoryImpl implements BrandRepository {
           ),
         }),
     );
+  }
+
+  private toDomain(b: any): Brand {
+    return new Brand({
+      id: b.id,
+      name: BrandName.unsafeCreate(b.name),
+      commission: BrandCommission.unsafeCreate(b.commision),
+      registrationNumber: BrandRegistrationNumber.unsafeCreate(
+        b.registrationNumber,
+      ),
+    });
   }
 }

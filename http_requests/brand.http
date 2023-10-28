@@ -6,3 +6,7 @@ Content-Type: application/json
   "commission": 8,
   "registrationNumber": "1111-1234-1234"
 }
+
+###
+
+DELETE http://localhost:3000/api/v1/brands/9

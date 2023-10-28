@@ -2,6 +2,7 @@ import express from "express";
 import { Either } from "effect";
 import { BrandNameAlreadyExists, CreateBrand } from "../useCase/createBrand";
 import { BrandRepositoryImpl } from "../infra/brandRepositoryImpl";
+import { DeleteBrand } from "../useCase/deleteBrand";
 
 const brandRouter = express.Router();
 
@@ -29,6 +30,21 @@ brandRouter.post<any, any, any, CreateBrandArgs>("/", async (req, res) => {
     },
     onRight: (dto) => {
       res.send(dto);
+    },
+  });
+});
+
+brandRouter.delete<any, { id: number }, any, any>("/:id", async (req, res) => {
+  const brandOrError = await new DeleteBrand(new BrandRepositoryImpl()).execute(
+    req.params.id,
+  );
+
+  Either.match(brandOrError, {
+    onLeft: (error) => {
+      res.status(404).send(error);
+    },
+    onRight: () => {
+      res.status(204).send();
     },
   });
 });

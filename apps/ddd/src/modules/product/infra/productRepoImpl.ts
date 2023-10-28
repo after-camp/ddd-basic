@@ -3,20 +3,27 @@ import { ProductRepository } from "./productRepo";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { dbPool } from "../../../infra/pool";
 import * as productSchema from "../../../infra/db/products";
+import { productTable } from "../../../infra/db/products";
 import * as reviewSchema from "../../../infra/db/reviews";
+import { reviewTable } from "../../../infra/db/reviews";
 import { ProductName } from "../domain/name";
 import { ProductStock } from "../domain/stock";
 import { ProductPrice } from "../domain/price";
 import { ReviewComment } from "../domain/reviewComment";
 import { Rating } from "../domain/rating";
 import { Review } from "../domain/review";
-import { reviewTable } from "../../../infra/db/reviews";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export class ProductRepositoryImpl implements ProductRepository {
   private db = drizzle(dbPool, {
     schema: { ...productSchema, ...reviewSchema },
   });
+
+  async deleteByBrandId(brandId: number): Promise<void> {
+    await this.db
+      .delete(productSchema.productTable)
+      .where(eq(productTable.brandId, brandId));
+  }
 
   async save(product: Product): Promise<Product> {
     const newProducts: (typeof productSchema.productTable.$inferSelect)[] = [];

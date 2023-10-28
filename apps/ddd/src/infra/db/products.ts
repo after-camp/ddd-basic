@@ -1,13 +1,11 @@
 import {
+  boolean,
   integer,
   pgTable,
   serial,
-  varchar,
-  time,
   timestamp,
-  boolean,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { brandTable } from "./brands";
 import { categoryTable } from "./categories";
 import { relations } from "drizzle-orm";
 import { reviewTable } from "./reviews";
@@ -17,9 +15,7 @@ export const productTable = pgTable("products", {
   name: varchar("name"),
   price: integer("price"),
   stock: integer("stock"),
-  brandId: integer("brand_id")
-    .references(() => brandTable.id)
-    .notNull(),
+  brandId: integer("brand_id").notNull(),
   categoryId: integer("category_id")
     .references(() => categoryTable.id)
     .notNull(),

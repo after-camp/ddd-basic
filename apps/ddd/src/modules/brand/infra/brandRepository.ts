@@ -6,4 +6,6 @@ export interface BrandRepository {
   existsByBrandName(brandName: BrandName): Promise<boolean>;
   existsById(brandId: number): Promise<boolean>;
   getBrandsByIds(brandIds: number[]): Promise<Brand[]>;
+  findById(id: number): Promise<Brand | undefined>;
+  delete(brand: Brand): Promise<void>;
 }
