@@ -8,6 +8,7 @@ import { categoryRouter } from "./modules/category/route";
 import { DomainEvents } from "../../../shared/src/lib/domain/events/DomainEvents";
 import { BrandDeleted } from "./modules/brand/domain/event/brandDeleted";
 import { ProductEventHandler } from "./modules/product/infra/eventListener";
+import { orderRouter } from "./modules/order/route";
 
 export const authService: AuthService = new RedisAuthService();
 
@@ -21,6 +22,7 @@ v1Router.use("/users", userRouter);
 v1Router.use("/products", productRouter);
 v1Router.use("/brands", brandRouter);
 v1Router.use("/categories", categoryRouter);
+v1Router.use("/orders", orderRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -1,0 +1,21 @@
+POST http://localhost:3000/api/v1/orders
+Content-Type: application/json
+
+{
+  "userId": 4,
+  "receiverName": "John Doe",
+  "receiverPhone": "08123456789",
+  "receiverAddress": "Jl. Raya Kebayoran Lama No. 12",
+  "orderItems": [
+    {
+      "productName": "Product 1",
+      "productPrice": 100000,
+      "option": "Option 1"
+    },
+    {
+      "productName": "Product 2",
+      "productPrice": 200000,
+      "option": "Option 2"
+    }
+  ]
+}
