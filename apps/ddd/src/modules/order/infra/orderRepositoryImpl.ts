@@ -29,9 +29,9 @@ export class OrderRepositoryImpl implements OrderRepository {
         (orderItem) =>
           ({
             orderId: o[0].id,
+            productId: orderItem.props.productId,
             productName: orderItem.props.productName,
             orderState: orderItem.props.orderState,
-            option: orderItem.props.option,
             productPrice: orderItem.props.productPrice,
           }) satisfies typeof orderItemsTable.$inferInsert,
       );
@@ -50,9 +50,9 @@ export class OrderRepositoryImpl implements OrderRepository {
           orderItems: orderItems.map((orderItem) =>
             OrderItem.create(
               {
+                productId: orderItem.productId,
                 productName: orderItem.productName,
                 orderState: orderItem.orderState as any,
-                option: orderItem.option,
                 productPrice: orderItem.productPrice,
                 orderId: orderItem.orderId,
               },

@@ -4,16 +4,15 @@ import { OrderRepositoryImpl } from "../infra/orderRepositoryImpl";
 
 const orderRouter = express.Router();
 
-
 export interface CreateOrderArgs {
   receiverName: string;
   receiverPhone: string;
   receiverAddress: string;
   userId: number;
   orderItems: {
+    productId: number;
     productName: string;
     productPrice: number;
-    option?: string;
   }[];
 }
 

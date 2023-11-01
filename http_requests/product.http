@@ -4,7 +4,7 @@ Content-Type: application/json
 {
   "name": "Product 2",
   "categoryId": 1,
-  "brandId": 1,
+  "brandId": 11,
   "price": 1000,
   "stock": 1
 }

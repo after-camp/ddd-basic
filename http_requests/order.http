@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/v1/orders
+POST http://localhost:3001/api/v1/orders
 Content-Type: application/json
 
 {
@@ -8,14 +8,14 @@ Content-Type: application/json
   "receiverAddress": "Jl. Raya Kebayoran Lama No. 12",
   "orderItems": [
     {
+      "productId": 19,
       "productName": "Product 1",
-      "productPrice": 100000,
-      "option": "Option 1"
+      "productPrice": 1000
     },
     {
+      "productId": 20,
       "productName": "Product 2",
-      "productPrice": 200000,
-      "option": "Option 2"
+      "productPrice": 1000
     }
   ]
 }

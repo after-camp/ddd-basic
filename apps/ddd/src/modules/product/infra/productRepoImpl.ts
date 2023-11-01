@@ -41,24 +41,26 @@ export class ProductRepositoryImpl implements ProductRepository {
         .returning();
       newProducts.push(...ps);
 
-      await trx
-        .insert(reviewTable)
-        .values(
-          product.props.reviews.map((review) => ({
-            id: review.props.id,
-            productId: product.props.id,
-            userId: review.props.userId,
-            rating: review.props.rating.props.value,
-            comment: review.props.comment.props.value,
-          })),
-        )
-        .onConflictDoUpdate({
-          target: reviewTable.id,
-          set: {
-            rating: sql`EXCLUDED.rating`,
-            comment: sql`EXCLUDED.comment`,
-          },
-        });
+      if (product.props.reviews.length !== 0) {
+        await trx
+          .insert(reviewTable)
+          .values(
+            product.props.reviews.map((review) => ({
+              id: review.props.id,
+              productId: product.props.id,
+              userId: review.props.userId,
+              rating: review.props.rating.props.value,
+              comment: review.props.comment.props.value,
+            })),
+          )
+          .onConflictDoUpdate({
+            target: reviewTable.id,
+            set: {
+              rating: sql`EXCLUDED.rating`,
+              comment: sql`EXCLUDED.comment`,
+            },
+          });
+      }
     });
 
     const newProduct = newProducts[0];

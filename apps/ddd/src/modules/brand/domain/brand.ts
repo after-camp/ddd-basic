@@ -1,4 +1,4 @@
-import { Entity, EntityClass, UniqueEntityID } from "@ddd/shared/domain";
+import { Entity, UniqueEntityID } from "@ddd/shared/domain";
 import { BrandName } from "./name";
 import { BrandCommission } from "./commision";
 import { BrandRegistrationNumber } from "./registrationNumber";

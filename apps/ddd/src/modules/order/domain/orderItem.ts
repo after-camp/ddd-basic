@@ -9,8 +9,8 @@ export const OrderState = {
 } as const;
 
 interface OrderItemProps {
-  option?: string;
   orderId: string;
+  productId: number;
   orderState: (typeof OrderState)[keyof typeof OrderState];
   productName: string;
   productPrice: number;

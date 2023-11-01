@@ -66,5 +66,6 @@ export class CreateProduct implements UseCase<any, any> {
     });
 
     await this.productRepository.save(product);
+    return Either.right(undefined);
   }
 }
