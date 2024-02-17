@@ -1,10 +1,10 @@
 import { OrderRepository } from "./orderRepository";
 import { Order } from "../domain/order";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { dbPool } from "../../../infra/pool";
-import { orderTable } from "../../../infra/db/orders";
-import { orderItemsTable } from "../../../infra/db/orderItems";
 import { OrderItem } from "../domain/orderItem";
+import { orderTable } from "../../../infra/db/orders";
+import { dbPool } from "../../../infra/pool";
+import { orderItemsTable } from "../../../infra/db/orderItems";
 
 export class OrderRepositoryImpl implements OrderRepository {
   private db = drizzle(dbPool, {
